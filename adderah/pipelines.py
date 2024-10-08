@@ -12,11 +12,13 @@ items (
     in_stock VARCHAR,
     description VARCHAR,
     category VARCHAR,
-    subcategory VARCHAR
+    subcategory VARCHAR,
+    url VARCHAR
 );
 CREATE TABLE IF NOT EXISTS images (
     item_id INTEGER,
-    image_path VARCHAR,
+    path VARCHAR,
+    url VARCHAR,
     FOREIGN KEY (item_id) REFERENCES items (id)
 );
 CREATE TABLE IF NOT EXISTS shipping (
@@ -52,9 +54,10 @@ class AdderahPipeline:
                     in_stock,
                     description,
                     category,
-                    subcategory
+                    subcategory,
+                    url
                ) 
-               VALUES (?, ?, ?, ?, ?, ?, ?);
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?);
             """, 
             (
                 item.name,
@@ -64,20 +67,19 @@ class AdderahPipeline:
                 item.description,
                 item.category,
                 item.subcategory,
+                item.url,
             )
         )
 
         self.conn.commit()
 
         self.cr.executemany(
-            "INSERT INTO images (item_id, image_path) VALUES (?,?)",
+            "INSERT INTO images (item_id, path, url) VALUES (?,?,?)",
             [
-                (self.cr.lastrowid, image['path']) 
+                (self.cr.lastrowid, image['path'], image['url']) 
                 for image in item.images
             ]
         )
-
-        self.conn.commit()
 
         self.cr.executemany(
             """INSERT INTO 

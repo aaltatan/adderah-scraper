@@ -15,7 +15,7 @@ class Shipping:
         self.method = w3lib.html.remove_tags(self.method).strip().strip('\n')
         self.duration = w3lib.html.remove_tags(self.duration).strip().strip('\n')
         self.price = float(
-            w3lib.html.remove_tags(self.price).replace('ر.س', '').strip('\t').strip()
+            w3lib.html.remove_tags(self.price).replace('ر.س', '').replace(',', '').strip('\t').strip()
         )
 
 
@@ -31,11 +31,12 @@ class Item:
     description: list[str] = field(default=list)
     category: str = ''
     subcategory: str = ''
+    url: str = ''
 
     def __post_init__(self):
 
         self.name = self.name.strip().strip('\n')
-        self.price = float(self.price.replace('ر.س', '').strip('\t').strip())
+        self.price = float(self.price.replace('ر.س', '').replace(',', '').strip('\t').strip())
         self.seller = self.seller.strip().strip('\n')
         self.in_stock = self.in_stock.strip().strip('\n')
 

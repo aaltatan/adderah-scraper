@@ -64,6 +64,7 @@ class ItemsSpider(scrapy.Spider):
             'description': description,
             'category': category,
             'subcategory': subcategory,
+            'url': response.url,
         }
 
         return items.Item(

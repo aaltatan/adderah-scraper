@@ -1,3 +1,2 @@
 scrapy
 Pillow
-sqlalchemy
